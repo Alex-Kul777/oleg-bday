@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎂 Олег</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: white;
+  overflow-x: hidden;
+  padding: 20px;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 6vw, 3.5rem);
+  text-align: center;
+  background: linear-gradient(90deg, #ff6b6b, #feca57, #ff9ff3, #ff6b6b);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.arrow {
+  font-size: 2.5rem;
+  margin: 30px 0 20px;
+  animation: bounce 1.5s ease-in-out infinite;
+  cursor: pointer;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(15px); }
+}
+
+.flip-container {
+  perspective: 1000px;
+  width: 280px;
+  height: 380px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-container.flipped .flipper {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  border: 2px solid rgba(255,255,255,0.15);
+}
+
+.card-front {
+  background: linear-gradient(145deg, #e94560, #0f3460);
+}
+
+.card-back {
+  background: linear-gradient(145deg, #f368e0, #ff9ff3);
+  transform: rotateY(180deg);
+}
+
+.tap-hint {
+  font-size: 1rem;
+  opacity: 0.7;
+  margin-top: 15px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.emoji-big { font-size: 4rem; margin-bottom: 15px; }
+
+.heart-text {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.heart {
+  display: inline-block;
+  animation: heartbeat 1.2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.confetti {
+  position: fixed;
+  top: -10px;
+  font-size: 1.5rem;
+  animation: fall linear forwards;
+  z-index: -1;
+}
+
+@keyframes fall {
+  to { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<h1>🥳 С днём балбеса Олега! 🎉</h1>
+
+<div class="arrow">👇</div>
+
+<div class="flip-container" onclick="this.classList.toggle('flipped')">
+  <div class="flipper">
+    <div class="card-face card-front">
+      <div class="emoji-big">🎁</div>
+      <div class="tap-hint">👆 нажми меня</div>
+    </div>
+    <div class="card-face card-back">
+      <div class="heart-text">Ева и Олег<br><span class="heart">❤️</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const emojis = ['🎉','🎊','✨','🎈','⭐','💫','🧁','🍰','💝','🌟'];
+for (let i = 0; i < 30; i++) {
+  const c = document.createElement('div');
+  c.className = 'confetti';
+  c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+  c.style.left = Math.random()*100 + 'vw';
+  c.style.animationDuration = (3+Math.random()*4) + 's';
+  c.style.animationDelay = Math.random()*5 + 's';
+  document.body.appendChild(c);
+}
+</script>
+
+</body>
+</html>
