@@ -2,19 +2,21 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>❤️ Ева и Олег</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
 
 body {
   background: linear-gradient(180deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%);
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: white;
-  overflow-x: hidden;
+  width: 100%;
 }
 
-/* === SCROLL HINT SECTION === */
+/* === HERO === */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -58,10 +60,10 @@ body {
   50% { transform: translateY(15px); }
 }
 
-/* spacer to force scroll */
-.spacer { height: 60vh; }
+/* spacer */
+.spacer { height: 40vh; }
 
-/* === BUTTON SECTION === */
+/* === BUTTON === */
 .button-section {
   min-height: 80vh;
   display: flex;
@@ -83,6 +85,7 @@ body {
   box-shadow: 0 8px 30px rgba(233, 69, 96, 0.5);
   transition: transform 0.2s, box-shadow 0.2s;
   animation: glow 2s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes glow {
@@ -90,15 +93,10 @@ body {
   50% { box-shadow: 0 8px 50px rgba(243, 104, 224, 0.7); }
 }
 
-.press-btn:hover {
-  transform: scale(1.08);
-}
+.press-btn:hover { transform: scale(1.08); }
+.press-btn:active { transform: scale(0.95); }
 
-.press-btn:active {
-  transform: scale(0.95);
-}
-
-/* === CLIP / SLIDESHOW === */
+/* === CLIP === */
 .clip-overlay {
   display: none;
   position: fixed;
@@ -110,9 +108,7 @@ body {
   flex-direction: column;
 }
 
-.clip-overlay.active {
-  display: flex;
-}
+.clip-overlay.active { display: flex; }
 
 .slide {
   position: absolute;
@@ -123,11 +119,8 @@ body {
   transition: opacity 1.5s ease-in-out;
 }
 
-.slide.show {
-  opacity: 1;
-}
+.slide.show { opacity: 1; }
 
-/* hearts floating */
 .heart-float {
   position: absolute;
   font-size: 2rem;
@@ -142,7 +135,6 @@ body {
   100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
 }
 
-/* progress bar */
 .progress-bar {
   position: absolute;
   bottom: 0; left: 0;
@@ -176,7 +168,6 @@ body {
 
 .close-btn:hover { opacity: 1; }
 
-/* vignette */
 .vignette {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -188,7 +179,6 @@ body {
 </head>
 <body>
 
-<!-- HERO -->
 <div class="hero">
   <h1>❤️ Ева и Олег ❤️</h1>
   <div class="scroll-hint">листай ниже 👇</div>
@@ -197,12 +187,10 @@ body {
 
 <div class="spacer"></div>
 
-<!-- BUTTON -->
 <div class="button-section">
   <button class="press-btn" onclick="startClip()">нажми 💕</button>
 </div>
 
-<!-- CLIP OVERLAY -->
 <div class="clip-overlay" id="clip">
   <div class="vignette"></div>
   <img class="slide" id="slide0" src="photos/1.jpg">
@@ -215,38 +203,35 @@ body {
 
 <script>
 const photos = 3;
-const duration = 15000; // 15 sec
-const slideTime = duration / photos; // 5 sec each
+const duration = 15000;
+const slideTime = duration / photos;
 const captions = ["Ева и Олег", "навсегда вместе", "❤️❤️❤️"];
 let clipTimer, heartTimer, progressTimer;
 
 function startClip() {
-  const clip = document.getElementById('clip');
+  var clip = document.getElementById('clip');
   clip.classList.add('active');
 
-  // show slides sequentially
-  for (let i = 0; i < photos; i++) {
-    setTimeout(() => {
-      // hide all
-      for (let j = 0; j < photos; j++) {
-        document.getElementById('slide'+j).classList.remove('show');
-      }
-      // show current
-      document.getElementById('slide'+i).classList.add('show');
-      document.getElementById('clipText').textContent = captions[i];
-    }, i * slideTime);
+  for (var i = 0; i < photos; i++) {
+    (function(idx) {
+      setTimeout(function() {
+        for (var j = 0; j < photos; j++) {
+          document.getElementById('slide'+j).classList.remove('show');
+        }
+        document.getElementById('slide'+idx).classList.add('show');
+        document.getElementById('clipText').textContent = captions[idx];
+      }, idx * slideTime);
+    })(i);
   }
 
-  // progress bar
-  const start = Date.now();
-  progressTimer = setInterval(() => {
-    const pct = Math.min(100, (Date.now() - start) / duration * 100);
+  var start = Date.now();
+  progressTimer = setInterval(function() {
+    var pct = Math.min(100, (Date.now() - start) / duration * 100);
     document.getElementById('progress').style.width = pct + '%';
   }, 50);
 
-  // floating hearts
-  heartTimer = setInterval(() => {
-    const h = document.createElement('div');
+  heartTimer = setInterval(function() {
+    var h = document.createElement('div');
     h.className = 'heart-float';
     h.textContent = ['❤️','💕','💗','💖','💘'][Math.floor(Math.random()*5)];
     h.style.left = Math.random() * 100 + 'vw';
@@ -254,11 +239,10 @@ function startClip() {
     h.style.animationDuration = (2 + Math.random() * 2) + 's';
     h.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
     clip.appendChild(h);
-    setTimeout(() => h.remove(), 4000);
+    setTimeout(function() { h.remove(); }, 4000);
   }, 300);
 
-  // auto close after 15 sec
-  clipTimer = setTimeout(() => closeClip(), duration);
+  clipTimer = setTimeout(function() { closeClip(); }, duration);
 }
 
 function closeClip() {
@@ -266,7 +250,7 @@ function closeClip() {
   clearInterval(heartTimer);
   clearInterval(progressTimer);
   document.getElementById('clip').classList.remove('active');
-  for (let j = 0; j < photos; j++) {
+  for (var j = 0; j < photos; j++) {
     document.getElementById('slide'+j).classList.remove('show');
   }
   document.getElementById('progress').style.width = '0%';
